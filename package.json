@@ -1,0 +1,14 @@
+{
+  "name": "ldbdump",
+  "version": "1.0.0",
+  "description": "Utility to dump keys/values from LevelDB databases",
+  "bin": "./ldbdump",
+  "keywords": [],
+  "author": "Harald Fernengel <harryf@gmx.com>",
+  "license": "BSD-3-Clause",
+  "files": [
+    "build/ldbdump.js",
+    "build/ldbdump.wasm",
+    "ldbdump"
+  ]
+}
