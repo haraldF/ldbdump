@@ -21,7 +21,6 @@ jobs:
     - name: pack
       run: npm pack
     - name: upload artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
-        name: ldbdump
         path: ldbdump-*.tgz
