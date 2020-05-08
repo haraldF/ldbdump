@@ -18,3 +18,10 @@ jobs:
       run: emcmake cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
     - name: build
       run: cmake --build build
+    - name: pack
+      run: npm pack
+    - name: upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: ldbdump
+        path: ldbdump-*.tgz

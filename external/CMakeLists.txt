@@ -22,7 +22,6 @@ ExternalProject_Add(snappy_external
 
 ExternalProject_Get_Property(snappy_external INSTALL_DIR)
 set(SNAPPY_INSTALL_DIR ${INSTALL_DIR})
-message("SNAPPY ${SNAPPY_INSTALL_DIR}")
 
 # LevelDB uses check_library_exists, which requires CMAKE_REQUIRED_LINK_OPTIONS and CMAKE_REQUIRED_FLAGS
 # Once snappy is found, it doesn't propagate the -I and -L, so we need to manually override that as well
