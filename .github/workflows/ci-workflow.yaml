@@ -1,0 +1,20 @@
+name: emscripten CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-emscripten:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: lovasoa/setup-emscripten@master
+      with:
+        emscripten-version: '1.39.14'
+    - uses: actions/checkout@v2
+    - name: configure
+      run: emcmake cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+    - name: build
+      run: cmake --build build
