@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
     std::cout << "  A tool to introspect a leveldb database" << std::endl;
     std::cout << std::endl;
     std::cout << "  <db_path>    directory of the cache" << std::endl;
-    std::cout << "  [keys]       optional - dumps the value for the given key "
+    std::cout << "  [key]       optional - dumps the value for the given key "
                  "to stdout"
               << std::endl;
     return EXIT_FAILURE;
