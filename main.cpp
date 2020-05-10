@@ -6,12 +6,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void dumpAllKeys(leveldb::DB* db) {
+static void dumpAllKeys(leveldb::DB* db, bool keysOnly) {
   auto iter = std::unique_ptr<leveldb::Iterator>{db->NewIterator({})};
   iter->SeekToFirst();
   while (iter->Valid()) {
-    std::cout << iter->key().ToString() << " -> " << iter->value().size()
-              << " bytes" << std::endl;
+    std::cout << iter->key().ToString();
+    if (!keysOnly) {
+      std::cout << " -> " << iter->value().size()
+                << " bytes" << std::endl;
+    }
     iter->Next();
   }
 }
@@ -30,21 +33,40 @@ static bool dumpValue(leveldb::DB* db, const std::string& key) {
   return true;
 }
 
-int main(int argc, char* argv[]) {
-  if (argc < 2 || argv[1] == std::string("--help") ||
-      argv[1] == std::string("-h")) {
-    std::cout << "Usage: " << argv[0] << " <db_path> [key]" << std::endl;
+static void printUsage(const char* argv0) {
+    std::cout << "Usage: " << argv0 << " <db_path> [-k] [key]" << std::endl;
     std::cout << "  A tool to introspect a leveldb database" << std::endl;
     std::cout << std::endl;
     std::cout << "  <db_path>    directory of the cache" << std::endl;
-    std::cout << "  [key]       optional - dumps the value for the given key "
+    std::cout << "  [key]        optional - dumps the value for the given key "
                  "to stdout"
               << std::endl;
-    return EXIT_FAILURE;
+    std::cout << "  [-k]         print only keys, one per line" << std::endl;
+}
+
+int main(int argc, char* argv[]) {
+
+  bool keysOnly = false;
+  std::string dbPath;
+  std::string key;
+  for (int i = 1; i < argc; ++i) {
+    std::string arg = argv[i];
+    if (arg == "--help" || arg == "-h") {
+      printUsage(argv[0]);
+      return EXIT_SUCCESS;
+    } else if (arg == "-k") {
+      keysOnly = true;
+    } else if (dbPath.empty()) {
+      dbPath = std::move(arg);
+    } else {
+      key = std::move(arg);
+    }
   }
 
-  auto dbPath = argv[1];
-  auto key = argc >= 2 ? argv[2] : nullptr;
+  if (dbPath.empty()) {
+    printUsage(argv[0]);
+    return EXIT_FAILURE;
+  }
 
   leveldb::DB* db_ptr;
   auto status = leveldb::DB::Open({}, dbPath, &db_ptr);
@@ -55,10 +77,10 @@ int main(int argc, char* argv[]) {
     return EXIT_FAILURE;
   }
 
-  if (key != nullptr) {
+  if (!key.empty()) {
     if (!dumpValue(db.get(), key)) return EXIT_FAILURE;
   } else {
-    dumpAllKeys(db.get());
+    dumpAllKeys(db.get(), keysOnly);
   }
 
   return EXIT_SUCCESS;

@@ -3,8 +3,16 @@
   "version": "1.0.0",
   "description": "Utility to dump keys/values from LevelDB databases",
   "bin": "./ldbdump",
-  "keywords": [],
+  "keywords": [ "leveldb", "database", "dumper", "introspect" ],
   "author": "Harald Fernengel <harryf@gmx.com>",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/haraldF/ldbdump.git"
+  },
+  "homepage": "https://github.com/haraldF/ldbdump#ldbdump",
+  "bugs": {
+    "url": "https://github.com/haraldF/ldbdump/issues"
+  },
   "license": "BSD-3-Clause",
   "files": [
     "build/ldbdump.js",
