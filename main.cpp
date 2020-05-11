@@ -6,6 +6,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef EMSCRIPTEN
+#  include <emscripten.h>
+#endif
+
 static void dumpAllKeys(leveldb::DB* db, bool keysOnly) {
   auto iter = std::unique_ptr<leveldb::Iterator>{db->NewIterator({})};
   iter->SeekToFirst();
@@ -67,6 +71,20 @@ int main(int argc, char* argv[]) {
     printUsage(argv[0]);
     return EXIT_FAILURE;
   }
+
+#ifdef EMSCRIPTEN
+  // Mount the database directory from NODEFS
+  EM_ASM({
+    const destDir = UTF8ToString($0);
+    try {
+      FS.mkdir("/data");
+      FS.mount(NODEFS, { root: destDir }, "/data");
+    } catch (err) {
+      console.error("Unable to mount directory", err);
+    }
+  }, dbPath.c_str());
+  dbPath = "/data";
+#endif
 
   leveldb::DB* db_ptr;
   auto status = leveldb::DB::Open({}, dbPath, &db_ptr);
