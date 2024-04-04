@@ -10,10 +10,12 @@ jobs:
   build-emscripten:
     runs-on: ubuntu-latest
     steps:
-    - uses: lovasoa/setup-emscripten@master
+    - uses: mymindstorm/setup-emsdk@v14
       with:
-        emscripten-version: '1.39.14'
-    - uses: actions/checkout@v2
+        emscripten-version: '3.1.56'
+    - uses: actions/checkout@v4
+    - name: verify
+      run: emcc -v
     - name: configure
       run: emcmake cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
     - name: build
@@ -21,6 +23,6 @@ jobs:
     - name: pack
       run: npm pack
     - name: upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         path: ldbdump-*.tgz

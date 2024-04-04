@@ -1,6 +1,6 @@
 {
   "name": "ldbdump",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utility to dump keys/values from LevelDB databases",
   "bin": "./ldbdump",
   "keywords": [ "leveldb", "database", "dumper", "introspect" ],
