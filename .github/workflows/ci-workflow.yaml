@@ -5,6 +5,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  tags:
+    - '*'
 
 jobs:
   build-emscripten:
@@ -26,3 +28,8 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         path: ldbdump-*.tgz
+    - name: publish to npm
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+      run: npm publish ldbdump-*.tgz
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
