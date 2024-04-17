@@ -36,6 +36,7 @@ set (LEVELDB_REQUIRED_FLAGS
 ExternalProject_Add(leveldb_external
   GIT_REPOSITORY    ${LEVELDB_URL}
   GIT_TAG           ${LEVELDB_TAG}
+  PATCH_COMMAND     patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/leveldb.compaction.patch
   CMAKE_ARGS        ${CMAKE_ARGS}
                     ${LEVELDB_CMAKE_ARGS}
                     "-DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_DIR}"

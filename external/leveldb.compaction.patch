@@ -1,0 +1,15 @@
+diff --git a/db/db_impl.cc b/db/db_impl.cc
+index 3468862..aa95d7c 100644
+--- a/db/db_impl.cc
++++ b/db/db_impl.cc
+@@ -662,8 +662,8 @@ void DBImpl::MaybeScheduleCompaction() {
+              !versions_->NeedsCompaction()) {
+     // No work to be done
+   } else {
+-    background_compaction_scheduled_ = true;
+-    env_->Schedule(&DBImpl::BGWork, this);
++//    background_compaction_scheduled_ = true;
++//    env_->Schedule(&DBImpl::BGWork, this);
+   }
+ }
+ 
