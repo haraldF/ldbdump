@@ -7,7 +7,7 @@ add_subdirectory(external)
 
 set(EXTRA_LIBRARIES)
 if (EMSCRIPTEN)
-    set(EXTRA_LIBRARIES "-lnodefs.js")
+    set(EXTRA_LIBRARIES "-lnodefs.js -lnoderawfs.js")
 endif()
 
 add_executable(ldbdump main.cpp)
@@ -17,6 +17,6 @@ if (EMSCRIPTEN)
   # ALLOW_MEMORY_GROWTH is required to have dynamic memory growth
   # EXIT_RUNTIME is required to flush stdout/stderr at exit
   set_target_properties(ldbdump PROPERTIES
-    LINK_FLAGS "-s ALLOW_MEMORY_GROWTH=1 -s EXIT_RUNTIME=1"
+      LINK_FLAGS "-s ALLOW_MEMORY_GROWTH=1 -s EXIT_RUNTIME=1 -s WASM_MEM_MAX=2GB"
   )
 endif()
