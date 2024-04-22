@@ -23,6 +23,20 @@ static void dumpAllKeys(leveldb::DB* db, bool keysOnly) {
   }
 }
 
+#ifdef EMSCRIPTEN
+// note - this is an emscripten specific workaround to write binary to stdout
+// for some reason, doing an frwrite to stdout produces garbage, probably
+// because of utf-8 conversion ??
+EM_JS(void, to_stdout, (const char* buffer, size_t length), {
+    const array = new Uint8Array(length);
+    for (let i = 0; i < length; i++) {
+      array[i] = getValue(buffer + i, 'i8');
+    }
+
+    process.stdout.write(array);
+});
+#endif
+
 static bool dumpValue(leveldb::DB* db, const std::string& key) {
   auto iter = std::unique_ptr<leveldb::Iterator>{db->NewIterator({})};
   iter->Seek(key);
@@ -31,8 +45,12 @@ static bool dumpValue(leveldb::DB* db, const std::string& key) {
     return false;
   }
 
+#ifdef EMSCRIPTEN
+  to_stdout(iter->value().data(), iter->value().size());
+#else
   // use fwrite to make sure that \0 bytes are also written
   fwrite(iter->value().data(), 1, iter->value().size(), stdout);
+#endif
 
   return true;
 }
