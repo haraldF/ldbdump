@@ -1,7 +1,7 @@
 set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY ON)
 
 set(SNAPPY_URL "https://github.com/google/snappy.git" CACHE STRING "Url to Snappy git")
-set(SNAPPY_TAG "1.2.0" CACHE STRING "Git tag to build")
+set(SNAPPY_TAG "1.2.2" CACHE STRING "Git tag to build")
 set(SNAPPY_CMAKE_ARGS "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" -DSNAPPY_BUILD_TESTS=OFF)
 
 set(LEVELDB_URL "https://github.com/google/leveldb.git" CACHE STRING "URL to LevelDB git")
@@ -36,7 +36,7 @@ set (LEVELDB_REQUIRED_FLAGS
 ExternalProject_Add(leveldb_external
   GIT_REPOSITORY    ${LEVELDB_URL}
   GIT_TAG           ${LEVELDB_TAG}
-  PATCH_COMMAND     patch --batch --dry-run --read-only=ignore --reverse --silent -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/leveldb.compaction.patch && echo "Patch already applied" || patch --forward -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/leveldb.compaction.patch
+  PATCH_COMMAND     patch --batch --dry-run --reverse --silent -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/leveldb.compaction.patch && echo "Patch already applied" || patch --forward -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/leveldb.compaction.patch
   CMAKE_ARGS        ${CMAKE_ARGS}
                     ${LEVELDB_CMAKE_ARGS}
                     "-DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_DIR}"
